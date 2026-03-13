@@ -13,11 +13,15 @@ if [ ! -f "$dkim_file" ]; then
     exit 1
 fi
 
-# Compatible extraction: works on all systems (no grep -P dependency)
-dkim_value=$(sed -n 's/.*p=\([^"]*\).*/\1/p' "$dkim_file" | tr -d ' \t\n\r')
+# Extract all quoted strings, concatenate, then pull out the p= value
+# This handles multi-line DKIM keys split across multiple quoted strings
+full_value=$(sed -n 's/.*"\([^"]*\)".*/\1/p' "$dkim_file" | tr -d ' \t\n\r')
 
-if [ -n "$dkim_value" ]; then
-    echo "v=DKIM1; k=rsa;p=$dkim_value"
+# Extract p= value from the concatenated string
+dkim_p=$(echo "$full_value" | sed 's/.*p=//g')
+
+if [ -n "$dkim_p" ]; then
+    echo "v=DKIM1; k=rsa;p=$dkim_p"
 else
     echo "No valid DKIM record found in $dkim_file"
 fi
