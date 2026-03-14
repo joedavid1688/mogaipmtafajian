@@ -54,8 +54,9 @@ pkg_install_debian() {
 pkg_install_redhat() {
   local PM=dnf
   is_cmd yum && PM=yum
+  $PM -y install epel-release || true
   $PM -y install \
-    opendkim \
+    opendkim opendkim-tools \
     unzip curl ca-certificates net-tools openssl
 }
 
