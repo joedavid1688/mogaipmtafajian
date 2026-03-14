@@ -11,8 +11,8 @@ set -euo pipefail
 # tls=yes       -> generate TLS cert, use-starttls yes
 # tls=no        -> skip TLS cert, use-starttls no
 
-if [ $# -ne 6 ]; then
-  echo "Usage: bash install2.sh <domain> <internal_ip> <password> <dkim_selector> <panel_port|0> <tls:yes|no>"
+if [ $# -ne 7 ]; then
+  echo "Usage: bash install.sh <domain> <internal_ip> <password> <dkim_selector> <panel_port|0> <tls:yes|no> <email_prefix>"
   exit 1
 fi
 
@@ -22,6 +22,7 @@ PASSWORD="$3"
 DKIM_SELECTOR="$4"
 PANEL_PORT="$5"
 USE_TLS="$6"
+EMAIL_PREFIX="$7"
 
 CONFIG_TEMPLATE="./conf/config"
 PMTA_ZIP="./pmta5.0r3.zip"
@@ -135,6 +136,7 @@ if [ ! -f /etc/pmta/config ]; then
   sed -i "s|__INTERNAL_IP__|${INTERNAL_IP}|g" /etc/pmta/config
   sed -i "s|__PASSWORD__|${PASSWORD}|g" /etc/pmta/config
   sed -i "s|__DKIM_SELECTOR__|${DKIM_SELECTOR}|g" /etc/pmta/config
+  sed -i "s|__EMAIL_PREFIX__|${EMAIL_PREFIX}|g" /etc/pmta/config
 else
   echo "[INFO] /etc/pmta/config already exists, skipping."
 fi
