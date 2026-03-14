@@ -23,7 +23,7 @@ DKIM_SELECTOR="$4"
 PANEL_PORT="$5"
 USE_TLS="$6"
 
-CONFIG_TEMPLATE="./conf/config2"
+CONFIG_TEMPLATE="./conf/config"
 PMTA_ZIP="./pmta5.0r3.zip"
 PMTA_EXTRACT_DIR="pmta5.0r3"
 
